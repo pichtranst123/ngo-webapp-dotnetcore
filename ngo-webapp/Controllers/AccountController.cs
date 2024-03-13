@@ -18,19 +18,43 @@ public class AccountController : Controller
         {
             using (var context = new NgoManagementContext())
             {
+                // Check if the username or email already exists
+                var existingUserWithUsername = await context.Users
+                    .AnyAsync(u => u.Username == model.Username);
+                var existingUserWithEmail = await context.Users
+                    .AnyAsync(u => u.Email == model.Email);
+
+                if (existingUserWithUsername)
+                {
+                    ModelState.AddModelError("Username", "Username is already taken.");
+                }
+
+                if (existingUserWithEmail)
+                {
+                    ModelState.AddModelError("Email", "Email is already in use.");
+                }
+
+                if (existingUserWithUsername || existingUserWithEmail)
+                {
+                    // Return the view with validation errors
+                    return View(model);
+                }
+
+                // Proceed with creating the user if the username and email are unique
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
                 var user = new User
                 {
                     Username = model.Username,
                     Email = model.Email,
                     PasswordHash = hashedPassword,
-                    RegistrationDate = DateTime.Now
+                    RegistrationDate = DateTime.Now,
+                    Balance = 10000
                 };
 
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
         }
 
@@ -108,7 +132,8 @@ public class AccountController : Controller
             {
                 Username = user.Username,
                 RegistrationDate = user.RegistrationDate,
-                Donations = donations
+                Balance = user.Balance,
+                Donations = donations,
             };
 
             return View(model);

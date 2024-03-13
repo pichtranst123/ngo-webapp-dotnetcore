@@ -31,23 +31,37 @@ public class HomeController : Controller
         }
 
         var userId = int.Parse(HttpContext.Session.GetString("UserID"));
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
 
         var appeal = await _context.Appeals.FindAsync(appealId);
         if (appeal == null)
         {
-            return NotFound();
+            return NotFound("Appeal not found");
         }
 
-        var totalDonations = await _context.Donations
-            .Where(d => d.AppealsId == appealId)
-            .SumAsync(d => d.Amount);
-
-        if (totalDonations + amount > appeal.Amount)
+        // Calculate the total donations for this appeal to ensure it doesn't exceed the goal
+        var totalDonationsForAppeal = await _context.Donations.Where(d => d.AppealsId == appealId).SumAsync(d => d.Amount);
+        if (totalDonationsForAppeal + amount > appeal.Amount)
         {
-            TempData["Error"] = "Donation amount exceeds the required amount for this appeal.";
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Donation exceeds the appeal goal.");
+            return View(); // Return with error
         }
 
+        // Check if the user has enough balance
+        if (user.Balance < amount)
+        {
+            ModelState.AddModelError("", "Insufficient balance for this donation.");
+            return View(); // Return with error
+        }
+
+        // Deduct the donation amount from the user's balance
+        user.Balance -= amount;
+
+        // Create and save the donation record
         var donation = new Donation
         {
             UserId = userId,
@@ -55,11 +69,15 @@ public class HomeController : Controller
             Amount = amount,
             DonationDate = DateTime.Now
         };
-
         _context.Donations.Add(donation);
+
+        // Update the user's balance in the database
+        _context.Users.Update(user);
+
         await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }
+
 
 }
