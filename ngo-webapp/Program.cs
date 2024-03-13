@@ -1,4 +1,4 @@
-using ngo_webapp.Models.Entities;
+﻿using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ngo_webapp.Models.Entities;
@@ -50,5 +50,12 @@ app.MapControllerRoute(
 app.UseSession();
 
 app.MapRazorPages();
-
+app.UseEndpoints(endpoints =>
+{
+endpoints.MapControllerRoute(
+       name: "admin",
+       pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
+       new { area = "Admin" } // Đặt area là "Admin"
+   );
+});
 app.Run();
