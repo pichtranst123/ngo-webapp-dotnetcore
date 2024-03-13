@@ -1,21 +1,27 @@
 ﻿@model ngo_webapp.Models.ProfileViewModel
 
-<h2>User Profile</h2>
-
-<div>
-    <h3>@Model.Username</h3>
-    <p>Registered on: @Model.RegistrationDate.ToShortDateString()</p>
-    <p>Balance: @Model.Balance</p>
-</div>
-
-
-
-
-<h4>Donation History</h4>
-
 @if (Model.Donations.Any())
 {
-    <table>
+<div class="user-dashboard">
+    <h2>Username: @Model.Username</h2>
+        <h4>Registered on: @Model.RegistrationDate.ToShortDateString()</h4>
+        <p>Balance: @Model.Balance.ToString("C")</p>
+
+    <div class="dashboard-widgets">
+        <div class="widget total-donations">
+            <span>Total Donations</span>
+                <h3>@Model.TotalAmount.ToString("C")</h3>
+        </div>
+        <div class="widget projects-supported">
+            <span>Projects Supported</span>
+                <h3>@Model.ProjectCount</h3>
+        </div>
+    </div>
+</div>
+
+<div class="donation-history">
+    <h4>Your Donation History</h4>
+    <table class="table">
         <thead>
             <tr>
                 <th>Appeal</th>
@@ -24,18 +30,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var donation in Model.Donations)
-            {
-                <tr>
-                    <td>@donation.AppealName</td>
-                    <td>@donation.Amount</td>
-                    <td>@donation.DonationDate.ToShortDateString()</td>
-                </tr>
-            }
+                @foreach (var donation in Model.Donations)
+                {
+                    <tr>
+                        <td>@donation.AppealName</td>
+                        <td>@donation.Amount.ToString("C")</td>
+                        <td>@donation.DonationDate.ToShortDateString()</td>
+                    </tr>
+                }
         </tbody>
     </table>
-}
-else
-{
+</div>
+    }
+    else
+    {
     <p>No donations made yet.</p>
-}
+    }

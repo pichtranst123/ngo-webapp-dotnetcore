@@ -20,3 +20,41 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.user-dashboard h2 {
+    margin-bottom: 2rem;
+}
+
+.dashboard-widgets {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+}
+
+.widget {
+    background-color: #f8f9fa; /* Widget Background Color */
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: center;
+}
+
+    .widget h3 {
+        margin-top: 0.5rem;
+        color: #34A853; /* Success Color for Numbers */
+    }
+
+.donation-history h4 {
+    margin-bottom: 1rem;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+}
+
+    .table th, .table td {
+        border: 1px solid #dee2e6; /* Table Border Color */
+        padding: 0.75rem;
+        text-align: left;
+    }

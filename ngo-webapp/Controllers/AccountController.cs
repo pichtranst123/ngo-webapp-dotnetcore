@@ -134,6 +134,8 @@ public class AccountController : Controller
                 RegistrationDate = user.RegistrationDate,
                 Balance = user.Balance,
                 Donations = donations,
+                TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
+                ProjectCount = donations.Select(d => d.AppealId).Distinct().Count()
             };
 
             return View(model);

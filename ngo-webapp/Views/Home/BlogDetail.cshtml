@@ -1,0 +1,13 @@
+﻿@model IEnumerable<ngo_webapp.Models.Entities.Blog>
+
+
+   <h1>Test</h1>
+@foreach (var blog in Model)
+{
+    <div>
+        <h2>@blog.Title</h2>
+        <p>@blog.Content</p>
+        <p>Author: @(blog.User?.Username ?? "Unknown")</p> <!-- Handle possible null User -->
+        <p>Date: @blog.CreationDate.ToShortDateString()</p>
+    </div>
+}

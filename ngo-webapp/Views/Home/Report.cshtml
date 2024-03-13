@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ngo_webapp.Models.Entities.Blog>
+
+@foreach (var blog in Model)
+{
+    <div>
+        <h2>@blog.Title</h2>
+        <p>@blog.Content</p>
+        <p>Author: @blog.User</p>
+        <p>Date: @blog.CreationDate.ToShortDateString()</p>
+    </div>
+}

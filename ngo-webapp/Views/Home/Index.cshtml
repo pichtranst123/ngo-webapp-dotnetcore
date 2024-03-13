@@ -22,6 +22,7 @@
         }
 
         <p>@donationInfo</p>
+        <a href="@Url.Action("BlogDetail", "Home", new { appealId = appeal.AppealsId })" class="btn btn-info">View Blog</a>
 
         @if (totalDonations < appeal.Amount)
         {

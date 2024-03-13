@@ -80,4 +80,15 @@ public class HomeController : Controller
     }
 
 
+    public async Task<IActionResult> BlogDetail(int appealId)
+    {
+        var blogs = await _context.Blogs
+                                  .Where(b => b.AppealId == appealId)
+                                  .ToListAsync(); // Temporarily remove any .Include() calls
+
+        return View(blogs);
+    }
+
+
+
 }
