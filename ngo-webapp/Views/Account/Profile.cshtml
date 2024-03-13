@@ -1,0 +1,40 @@
+﻿@model ngo_webapp.Models.ProfileViewModel
+
+<h2>User Profile</h2>
+
+<div>
+    <h3>@Model.Username</h3>
+    <p>Registered on: @Model.RegistrationDate.ToShortDateString()</p>
+</div>
+
+
+
+
+<h4>Donation History</h4>
+
+@if (Model.Donations.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Appeal</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donation in Model.Donations)
+            {
+                <tr>
+                    <td>@donation.AppealName</td>
+                    <td>@donation.Amount</td>
+                    <td>@donation.DonationDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No donations made yet.</p>
+}

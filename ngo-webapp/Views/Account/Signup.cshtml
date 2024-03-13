@@ -1,0 +1,22 @@
+﻿@model ngo_webapp.Models.SignupViewModel
+
+<form asp-action="Signup" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <button type="submit">Sign Up</button>
+</form>
+    

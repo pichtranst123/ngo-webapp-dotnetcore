@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ngo_webapp.Models.Entities.Appeal>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+
+@foreach (var appeal in Model)
+{
+    <div>
+        <h2>@appeal.AppealsName</h2>
+        <p>@appeal.Description</p>
+        <p>Organization: @appeal.Organization</p>
+
+        @{
+            decimal totalDonations = appeal.Donations.Sum(d => d.Amount);
+            string status = totalDonations >= appeal.Amount ? " (Ended)" : "";
+            string donationInfo = $"Amount Earned: {totalDonations:N2} / Amount Needed: {appeal.Amount:N2}{status}";
+        }
+
+        <p>@donationInfo</p>
+
+        @if (totalDonations < appeal.Amount)
+        {
+            <form asp-action="Donate" method="post">
+                <input type="hidden" name="appealId" value="@appeal.AppealsId" />
+                <input type="number" name="amount" min="1" step="any" placeholder="Enter amount" required />
+                <button type="submit">Donate</button>
+            </form>
+        }
+        else
+        {
+            <p>This appeal has reached its funding goal and is no longer accepting donations.</p>
+        }
+
+        <p>End Date: @appeal.EndDate.ToShortDateString()</p>
+    </div>
+}
