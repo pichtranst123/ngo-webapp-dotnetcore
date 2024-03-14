@@ -1,107 +1,145 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ngo_webapp.Areas.Admin.Models;
 using ngo_webapp.Areas.Admin.Models.Entities;
 
-namespace ngo_webapp.Areas.Admin.Controllers;
-[Area("Admin")]
-public class AppealsController(NGODbContext dbContext) : Controller
+namespace ngo_webapp.Areas.Admin.Controllers
 {
-	private readonly NGODbContext dbContext = dbContext;
-
-
-	// ---------- List ---------- //
-	[HttpGet]
-	public async Task<IActionResult> List()
+	[Area("Admin")]
+	public class AppealsController : Controller
 	{
-		var events = await dbContext.Appeals.ToListAsync();
-		return View(events);
-	}
+		private readonly NgoManagementContext _dbContext;
 
-
-	// ---------- Create ---------- //
-	[HttpGet]
-	public IActionResult Create() => View();
-
-	[HttpPost]
-	public async Task<IActionResult> CreateEvent(EventViewModel model)
-	{
-		try
+		public AppealsController(NgoManagementContext dbContext)
 		{
-			Appeal events = new()
-			{
-				AppealsName = model.AppealsName,
-				Organization = model.Organization,
-				Description = model.Description,
-				EndDate = model.EndDate,
-				Amount = model.Amount,
-				AppealsImage = model.AppealsImage,
-			};
-			await dbContext.Appeals.AddAsync(events);
-			await dbContext.SaveChangesAsync();
-			return RedirectToAction("List", "Event");
+			_dbContext = dbContext;
 		}
-		catch (Exception ex)
+
+		// GET: Admin/Appeals
+		public async Task<IActionResult> List()
 		{
-			Console.WriteLine(ex.Message);
+			var appeals = await _dbContext.Appeals.ToListAsync();
+			return View(appeals);
 		}
-		return NotFound();
-	}
 
-
-	// ---------- Update ---------- //
-	[HttpGet]
-	public async Task<IActionResult> Update(int id)
-	{
-		var events = await dbContext.Appeals.FindAsync(id);
-		return View(events);
-	}
-
-	[HttpPost]
-	public async Task<IActionResult> UpdateEvent(Appeal viewModel)
-	{
-		try
+		// GET: Admin/Appeals/Details/5
+		public async Task<IActionResult> Details(int? id)
 		{
-			var events = await dbContext.Appeals.FindAsync(viewModel.AppealsId);
-			if (events != null)
+			if (id == null)
 			{
-				events.AppealsName = viewModel.AppealsName;
-				events.Organization = viewModel.Organization;
-				events.Description = viewModel.Description;
-				events.EndDate = viewModel.EndDate;
-				events.Amount = viewModel.Amount;
-				events.AppealsImage = viewModel.AppealsImage;
-
-				await dbContext.SaveChangesAsync();
+				return NotFound();
 			}
-			return RedirectToAction("List", "Event");
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
-		return NotFound();
-	}
 
-
-	// ---------- Delete ---------- //
-	[HttpPost]
-	public async Task<IActionResult> DeleteEvent(Appeal viewModel)
-	{
-		try
-		{
-			var events = await dbContext.Appeals.AsNoTracking().FirstOrDefaultAsync(x => x.AppealsId == viewModel.AppealsId);
-			if (events != null)
+			var appeal = await _dbContext.Appeals
+				.FirstOrDefaultAsync(m => m.AppealsId == id);
+			if (appeal == null)
 			{
-				dbContext.Appeals.Remove(events);
-				await dbContext.SaveChangesAsync();
+				return NotFound();
 			}
-			return RedirectToAction("List", "Event");
+
+			return View(appeal);
 		}
-		catch (Exception ex)
+
+		// GET: Admin/Appeals/Create
+		public IActionResult Create()
 		{
-			Console.WriteLine(ex.Message);
+			return View();
 		}
-		return NotFound();
+
+		// POST: Admin/Appeals/Create
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal)
+		{
+			if (ModelState.IsValid)
+			{
+				_dbContext.Add(appeal);
+				await _dbContext.SaveChangesAsync();
+				return RedirectToAction(nameof(List));
+			}
+			return View(appeal);
+		}
+
+		// GET: Admin/Appeals/Edit/5
+		public async Task<IActionResult> Edit(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var appeal = await _dbContext.Appeals.FindAsync(id);
+			if (appeal == null)
+			{
+				return NotFound();
+			}
+			return View(appeal);
+		}
+
+		// POST: Admin/Appeals/Edit/5
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, [Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal)
+		{
+			if (id != appeal.AppealsId)
+			{
+				return NotFound();
+			}
+
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_dbContext.Update(appeal);
+					await _dbContext.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!AppealExists(appeal.AppealsId))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return RedirectToAction(nameof(List));
+			}
+			return View(appeal);
+		}
+
+		// GET: Admin/Appeals/Delete/5
+		public async Task<IActionResult> Delete(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var appeal = await _dbContext.Appeals
+				.FirstOrDefaultAsync(m => m.AppealsId == id);
+			if (appeal == null)
+			{
+				return NotFound();
+			}
+
+			return View(appeal);
+		}
+
+		// POST: Admin/Appeals/Delete/5
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var appeal = await _dbContext.Appeals.FindAsync(id);
+			_dbContext.Appeals.Remove(appeal);
+			await _dbContext.SaveChangesAsync();
+			return RedirectToAction(nameof(List));
+		}
+
+		private bool AppealExists(int id)
+		{
+			return _dbContext.Appeals.Any(e => e.AppealsId == id);
+		}
 	}
 }
