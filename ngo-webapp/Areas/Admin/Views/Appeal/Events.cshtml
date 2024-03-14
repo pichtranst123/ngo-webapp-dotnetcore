@@ -1,0 +1,44 @@
+﻿@{
+	ViewData["Title"] = "Show Events";
+}
+
+@model List<ngo_webapp.Areas.Admin.Models.Entities.Appeal>
+
+<div>
+	<h1>All Events</h1>
+	<table class="table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Event Name</th>
+				<th>Organization</th>
+				<th>Description</th>
+				<th>Create Date</th>
+				<th>End Date</th>
+				<th>Donation Limit</th>
+				<th>Status</th>
+				<th>Images</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.AppealsId</td>
+					<td>@item.AppealsName</td>
+					<td>@item.Organization</td>
+					<td>@item.Description</td>
+					<td>@item.CreationDate</td>
+					<td>@item.EndDate</td>
+					<td>@item.Amount</td>
+					<td>@item.Status</td>
+					<td>@item.AppealsImage</td>
+					<td><a class="btn btn-outline-primary" asp-controller="Event" asp-action="Update" asp-route-id="@item.AppealsId">Edit</a></td>
+					<td><a class="btn btn-outline-danger ms-2" asp-controller="Event" asp-action="DeleteEvent">Delete</a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+<div><a class="btn btn-outline-success" asp-action="Create" asp-controller="Event">Create</a></div>

@@ -1,0 +1,26 @@
+﻿namespace ngo_webapp.Areas.Admin.Models.Entities;
+
+public partial class User
+{
+    public int UserId { get; set; }
+
+    public string Username { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
+    public string PasswordHash { get; set; } = null!;
+
+    public DateTime RegistrationDate { get; set; }
+
+    public bool IsAdmin { get; set; }
+
+    public string? Bio { get; set; }
+
+    public string? GoogleHash { get; set; }
+
+    public string? UserImage { get; set; }
+
+    public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
+    public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();
+}
