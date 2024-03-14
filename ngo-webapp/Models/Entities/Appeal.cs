@@ -6,6 +6,7 @@ namespace ngo_webapp.Models.Entities;
 public partial class Appeal
 {
     public int AppealsId { get; set; }
+
     public string AppealsName { get; set; } = null!;
 
     public string? Organization { get; set; }
@@ -22,10 +23,7 @@ public partial class Appeal
 
     public string? AppealsImage { get; set; }
 
-
-
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 
     public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();
-
 }

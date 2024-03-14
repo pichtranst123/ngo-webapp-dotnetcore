@@ -25,10 +25,7 @@ public partial class User
 
     public decimal Balance { get; set; } = 10000;
 
-
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 
     public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();
-
-
 }
