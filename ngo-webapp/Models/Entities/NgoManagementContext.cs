@@ -25,13 +25,13 @@ public partial class NgoManagementContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DEVBLOCK;Initial Catalog=Ngo-management;Persist Security Info=True;User ID=sa;Password=05012004;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=NGO_Management;Persist Security Info=True;User ID=sa;Password=Hieu1309;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Appeal>(entity =>
         {
-            entity.HasKey(e => e.AppealsId).HasName("PK__Appeals__5E813B30A8132DFC");
+            entity.HasKey(e => e.AppealsId).HasName("PK__Appeals__5E813B30B5B226A6");
 
             entity.HasIndex(e => e.AppealsName, "UC_Appeals_AppealsName").IsUnique();
 
@@ -54,10 +54,13 @@ public partial class NgoManagementContext : DbContext
 
         modelBuilder.Entity<Blog>(entity =>
         {
-            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E50C6BFD400");
+            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E505569532E");
 
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
-            entity.Property(e => e.AppealId).HasColumnName("AppealID");
+            entity.Property(e => e.BlogImage)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("Blog_Image");
             entity.Property(e => e.Content).IsUnicode(false);
             entity.Property(e => e.CreationDate).HasColumnType("datetime");
             entity.Property(e => e.Title)
@@ -65,20 +68,14 @@ public partial class NgoManagementContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
-            entity.HasOne(d => d.Appeal).WithMany(p => p.Blogs)
-                .HasForeignKey(d => d.AppealId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Blogs_Appeals");
-
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Blogs_Users");
         });
 
         modelBuilder.Entity<Donation>(entity =>
         {
-            entity.HasKey(e => e.DonationId).HasName("PK__Donation__C5082EDB745B0277");
+            entity.HasKey(e => e.DonationId).HasName("PK__Donation__C5082EDB64D8D63A");
 
             entity.Property(e => e.DonationId).HasColumnName("DonationID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
@@ -97,7 +94,7 @@ public partial class NgoManagementContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC6A9A6DB9");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC8AB4EA64");
 
             entity.HasIndex(e => e.Email, "UC_Users_Email").IsUnique();
 

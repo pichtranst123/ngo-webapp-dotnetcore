@@ -48,7 +48,7 @@ public class AccountController : Controller
                     Email = model.Email,
                     PasswordHash = hashedPassword,
                     RegistrationDate = DateTime.Now,
-                    Balance = 10000
+                    //Balance = 10000
                 };
 
                 context.Users.Add(user);
@@ -132,7 +132,7 @@ public class AccountController : Controller
             {
                 Username = user.Username,
                 RegistrationDate = user.RegistrationDate,
-                Balance = user.Balance,
+                //Balance = user.Balance,
                 Donations = donations,
                 TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
                 ProjectCount = donations.Select(d => d.AppealId).Distinct().Count()

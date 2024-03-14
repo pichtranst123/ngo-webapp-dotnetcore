@@ -52,14 +52,14 @@ public class HomeController : Controller
         }
 
         // Check if the user has enough balance
-        if (user.Balance < amount)
-        {
-            ModelState.AddModelError("", "Insufficient balance for this donation.");
-            return View(); // Return with error
-        }
+        //if (user.Balance < amount)
+        //{
+        //    ModelState.AddModelError("", "Insufficient balance for this donation.");
+        //    return View(); // Return with error
+        //}
 
         // Deduct the donation amount from the user's balance
-        user.Balance -= amount;
+        //user.Balance -= amount;
 
         // Create and save the donation record
         var donation = new Donation
@@ -80,14 +80,14 @@ public class HomeController : Controller
     }
 
 
-    public async Task<IActionResult> BlogDetail(int appealId)
-    {
-        var blogs = await _context.Blogs
-                                  .Where(b => b.AppealId == appealId)
-                                  .ToListAsync(); // Temporarily remove any .Include() calls
+    //public async Task<IActionResult> BlogDetail(int appealId)
+    //{
+    //    var blogs = await _context.Blogs
+    //                              .Where(b => b.AppealId == appealId)
+    //                              .ToListAsync(); // Temporarily remove any .Include() calls
 
-        return View(blogs);
-    }
+    //    return View(blogs);
+    //}
 
 
 
