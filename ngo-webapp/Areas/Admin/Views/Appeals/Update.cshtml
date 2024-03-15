@@ -1,0 +1,67 @@
+﻿@model ngo_webapp.Areas.Admin.Models.Entities.Appeal
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Home/Index.cshtml";
+}
+
+<h1>Update</h1>
+
+<h4>Appeal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AppealsId" />
+            <div class="form-group">
+                <label asp-for="AppealsName" class="control-label"></label>
+                <input asp-for="AppealsName" class="form-control" />
+                <span asp-validation-for="AppealsName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Organization" class="control-label"></label>
+                <input asp-for="Organization" class="form-control" />
+                <span asp-validation-for="Organization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppealsImage" class="control-label"></label>
+                <input asp-for="AppealsImage" class="form-control" />
+                <span asp-validation-for="AppealsImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
