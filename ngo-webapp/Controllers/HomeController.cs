@@ -58,7 +58,7 @@ public class HomeController : Controller
             return View(); // Return with error
         }
 
-        // Deduct the donation amount from the user's balance
+        //Deduct the donation amount from the user's balance
         user.Balance -= amount;
 
         // Create and save the donation record
