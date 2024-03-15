@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ngo_webapp.Areas.Admin.Models.Entities;
+using ngo_webapp.Models.Entities;
 
 namespace ngo_webapp.Areas.Admin.Controllers
 {
