@@ -1,7 +1,6 @@
 ﻿using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ngo_webapp.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
