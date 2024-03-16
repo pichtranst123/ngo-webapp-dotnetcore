@@ -66,7 +66,18 @@
 										</div>
 									</div>
 									<div class="header-info-right d-flex align-items-center">
-										<a href="@Url.Action("Login", "Home")" style="color:#072366">Signin/Signup</a>
+										@if (string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+										{
+											<a class="genric-btn info circle" asp-controller="Account" asp-action="Login">Login</a>
+										}
+										else
+										{
+											<a class="genric-btn success circle" style="margin-right:5px" asp-controller="Account" asp-action="Profile">My Profile</a>
+
+											<form asp-controller="Account" asp-action="Logout" method="post">
+												<button type="submit" class="genric-btn danger circle">Logout</button>
+											</form>
+										}
 									</div>
 								</div>
 							</div>
@@ -98,7 +109,7 @@
 										</div>
 										<!-- Header-btn -->
 										<div class="header-right-btn d-none d-lg-block ml-20">
-											<a href="contact.html" class="btn header-btn">Donate</a>
+											<a href="@Url.Action("Donate", "Home")" class="btn header-btn">Donate</a>
 										</div>
 									</div>
 								</div>
