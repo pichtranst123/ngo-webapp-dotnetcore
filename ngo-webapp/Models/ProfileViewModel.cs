@@ -12,9 +12,9 @@ public class ProfileViewModel
 
     public class DonationDetail
     {
+        public int AppealId { get; set; }
         public string AppealName { get; set; }
         public decimal Amount { get; set; }
         public DateTime DonationDate { get; set; }
-        public int AppealId { get; set; }
     }
 }

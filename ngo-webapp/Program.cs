@@ -1,7 +1,6 @@
 ﻿using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ngo_webapp.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Configure Entity Framework and DbContext
+//Configure Entity Framework and DbContext
 builder.Services.AddDbContext<NgoManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionString")));
 
