@@ -1,73 +1,44 @@
-﻿@model IEnumerable<ngo_webapp.Models.Entities.Appeal>
+@model IEnumerable<ngo_webapp.Models.Entities.Appeal>
 
-<h1>List</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AppealsName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Organization)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AppealsImage)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AppealsName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organization)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AppealsImage)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AppealsId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AppealsId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AppealsId">Delete</a>
-            </td>
-        </tr>
+@{
+    ViewData["Title"] = "Events";
+    Layout = "~/Views/Shared/_AdminLayout";
 }
-    </tbody>
-</table>
+<div>
+	<h1>All Events</h1>
+	<table class="table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Event Name</th>
+				<th>Organization</th>
+				<th>Description</th>
+				<th>Create Date</th>
+				<th>End Date</th>
+				<th>Donation Limit</th>
+				<th>Status</th>
+				<th>Images</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.AppealsId</td>
+					<td>@item.AppealsName</td>
+					<td>@item.Organization</td>
+					<td>@item.Description</td>
+					<td>@item.CreationDate</td>
+					<td>@item.EndDate</td>
+					<td>@item.Amount</td>
+					<td>@item.Status</td>
+					<td>@item.AppealsImage</td>
+					<td><button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.AppealsId">Edit</button></td>
+					<td><button class="btn btn-outline-danger ms-2" asp-action="Delete" asp-route-id="@item.AppealsId">Delete</button></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+<div><button class="btn btn-outline-success" asp-action="Create">Create</button></div>

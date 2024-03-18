@@ -1,4 +1,4 @@
-﻿using ngo_webapp.Models.Entities;
+using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,13 +18,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Configure Entity Framework and DbContext
-//User connect!
+//Configure Entity Framework and DbContext
 builder.Services.AddDbContext<NgoManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionString")));
 
-builder.Services.AddDbContext<NgoManagementContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("AdminConnectionString")), ServiceLifetime.Scoped);
+
 // Configure authentication services here (if you decide to use ASP.NET Core Identity or similar)
 
 
@@ -51,8 +49,6 @@ app.MapControllerRoute(
 app.UseSession();
 
 app.MapRazorPages();
-
-//Admin
 app.UseEndpoints(endpoints =>
 {
 endpoints.MapControllerRoute(
