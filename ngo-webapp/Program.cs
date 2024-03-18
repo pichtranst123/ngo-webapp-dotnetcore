@@ -23,8 +23,6 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<NgoManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionString")));
 
-builder.Services.AddDbContext<NgoManagementContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("AdminConnectionString")), ServiceLifetime.Scoped);
 // Configure authentication services here (if you decide to use ASP.NET Core Identity or similar)
 
 
