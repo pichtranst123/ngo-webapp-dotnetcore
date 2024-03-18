@@ -1,4 +1,7 @@
-﻿namespace ngo_webapp.Areas.Admin.Models.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ngo_webapp.Areas.Admin.Models.Entities;
 
 public partial class Donation
 {

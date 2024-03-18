@@ -14,7 +14,7 @@ This file contains the list of everyone who contributed to the repository :troph
       <a href="https://github.com/pichtranst123">pich2004</a> :octocat:
     </td>
     <td>
-      <a href="https://github.com/pichtranst123/donate-webapp/commits?author=pichtranst123">Contributions</a> by pich2004 :memo:
+      <a href="https://github.com/pichtranst123/ngo-webapp-dotnetcore/commits?author=pichtranst123">Contributions</a> by pich2004 :memo:
     </td>
   </tr>
   <tr>
@@ -24,7 +24,7 @@ This file contains the list of everyone who contributed to the repository :troph
       <a href="https://github.com/HieuMinh1309">HieuMinh1309</a> :octocat:
     </td>
     <td>
-      <a href="https://github.com/pichtranst123/donate-webapp/commits?author=HieuMinh1309">Contributions</a> by HieuMinh1309 :memo:
+      <a href="https://github.com/pichtranst123/ngo-webapp-dotnetcore/commits?author=HieuMinh1309">Contributions</a> by HieuMinh1309 :memo:
     </td>
   </tr>
     <tr>
@@ -34,7 +34,7 @@ This file contains the list of everyone who contributed to the repository :troph
       <a href="https://github.com/ThaiNguyen200104">ThaiNguyen200104</a> :octocat:
     </td>
     <td>
-      <a href="https://github.com/pichtranst123/donate-webapp/commits?author=ThaiNguyen200104">Contributions</a> by ThaiNguyen200104 :memo:
+      <a href="https://github.com/pichtranst123/ngo-webapp-dotnetcore/commits?author=ThaiNguyen200104">Contributions</a> by ThaiNguyen200104 :memo:
     </td>
   </tr>
 </table>

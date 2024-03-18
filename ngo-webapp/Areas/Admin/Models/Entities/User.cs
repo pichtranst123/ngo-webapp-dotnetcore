@@ -1,4 +1,7 @@
-﻿namespace ngo_webapp.Areas.Admin.Models.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ngo_webapp.Areas.Admin.Models.Entities;
 
 public partial class User
 {
@@ -19,6 +22,8 @@ public partial class User
     public string? GoogleHash { get; set; }
 
     public string? UserImage { get; set; }
+
+    public decimal? Balance { get; set; }
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 

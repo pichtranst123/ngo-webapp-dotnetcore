@@ -1,4 +1,4 @@
-﻿namespace ngo_webapp.Models;
+namespace ngo_webapp.Models;
 
 public class ProfileViewModel
 {
