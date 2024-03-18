@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ngo_webapp.Models.Entities;
@@ -19,5 +19,5 @@ public partial class Blog
 
     public virtual Appeal Appeal { get; set; } = null!;
 
-    public virtual User? User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

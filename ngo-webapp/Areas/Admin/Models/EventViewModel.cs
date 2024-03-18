@@ -2,8 +2,6 @@
 
 public class EventViewModel
 {
-	public int Id { get; set; }
-
 	public int AppealsId { get; set; }
 
 	public string AppealsName { get; set; } = null!;
