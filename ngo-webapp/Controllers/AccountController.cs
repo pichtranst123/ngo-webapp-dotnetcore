@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ngo_webapp.Models;
 using ngo_webapp.Models.Entities;
@@ -123,24 +124,87 @@ public class AccountController : Controller
                 .Include(d => d.Appeals)
                 .Select(d => new ProfileViewModel.DonationDetail
                 {
+                    AppealId = d.Appeals.AppealsId,
                     AppealName = d.Appeals.AppealsName,
                     Amount = d.Amount,
                     DonationDate = d.DonationDate
                 }).ToListAsync();
 
-            var model = new ProfileViewModel
+			var model = new ProfileViewModel
             {
                 Username = user.Username,
                 RegistrationDate = user.RegistrationDate,
                 Balance = user.Balance,
                 Donations = donations,
                 TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
-                ProjectCount = donations.Select(d => d.AppealId).Distinct().Count()
-            };
+                ProjectCount = donations.Select(d => d.AppealId).Distinct().Count(),
+                Email = user.Email,
+                UserImage = user.UserImage,
+                Bio = user.Bio,
+                //AppealId = donations.Select(d => d.AppealId).ToList();
+
+		};
 
             return View(model);
         }
     }
 
+    [HttpGet]
+    public IActionResult Export()
+    {
+        return RedirectToAction("Profile", "Account");
+    }
+
+	public async Task<IActionResult> Export(int appealId)
+	{
+		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+		{
+			return RedirectToAction("Login", "Account");
+		}
+		var userId = int.Parse(HttpContext.Session.GetString("UserID"));
+		using (var context = new NgoManagementContext())
+		{
+			var user = await context.Users.FindAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			var appeal = await context.Appeals.FindAsync(appealId);
+			if (appeal == null)
+			{
+				return NotFound();
+			}
+
+			var bill = await context.Donations
+				.Where(a => a.UserId == userId)
+				.Include(a => a.Appeals)
+                .Include(a => a.User)
+				.Select(a => new ProfileViewModel.DonationDetail
+				{
+					Username = a.User.Username,
+					AppealName = a.Appeals.AppealsName,
+					Amount = a.Amount
+				}).ToListAsync();
+
+			var document = new iTextSharp.text.Document();
+			var writer = PdfWriter.GetInstance(document, new FileStream("users.pdf", FileMode.Create));
+			document.Open();
+
+			var table = new PdfPTable(3); //add content into the document
+			table.AddCell("Username");
+			table.AddCell("AppealName");
+			table.AddCell("Amount");
+			foreach (var item in bill)
+			{
+				table.AddCell(item.Username);
+				table.AddCell(item.AppealName);
+				table.AddCell(item.Amount.ToString());
+			}
+			document.Add(table);
+			document.Close();
+			writer.Close();
+			return File("bill.pdf", "application/pdf");
+		}
+	}
 
 }
