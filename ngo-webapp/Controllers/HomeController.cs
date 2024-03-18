@@ -14,7 +14,6 @@ public class HomeController(NgoManagementContext context) : Controller
 		return View(appeals);
 	}
 
-
 	[HttpPost]
 	public async Task<IActionResult> Donate(int appealId, decimal amount)
 	{
