@@ -1,4 +1,4 @@
-﻿using ngo_webapp.Models.Entities;
+using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
