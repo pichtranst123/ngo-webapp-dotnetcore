@@ -21,11 +21,6 @@ public class HomeController : Controller
         return View(appeals);
     }
 
-	public async Task<IActionResult> Donate()
-	{
-		var appeals = await _context.Appeals.Include(a => a.Donations).ToListAsync();
-		return View(appeals);
-	}
 
 
 	[HttpPost]

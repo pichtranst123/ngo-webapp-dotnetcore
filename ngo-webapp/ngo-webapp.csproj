@@ -24,6 +24,7 @@
     <Folder Include="Areas\Admin\Models\Entities\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Models\Entities\" />
+    <Folder Include="Images\" />
   </ItemGroup>
 
 </Project>
