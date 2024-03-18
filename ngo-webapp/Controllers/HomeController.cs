@@ -21,8 +21,14 @@ public class HomeController : Controller
         return View(appeals);
     }
 
+	public async Task<IActionResult> Donate()
+	{
+		var appeals = await _context.Appeals.Include(a => a.Donations).ToListAsync();
+		return View(appeals);
+	}
 
-    [HttpPost]
+
+	[HttpPost]
     public async Task<IActionResult> Donate(int appealId, decimal amount)
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
@@ -88,7 +94,4 @@ public class HomeController : Controller
 
         return View(blogs);
     }
-
-
-
 }
