@@ -80,3 +80,5 @@ public class HomeController(NgoManagementContext context) : Controller
 		return View(blogs);
 	}
 }
+
+
