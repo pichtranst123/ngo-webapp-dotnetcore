@@ -5,9 +5,11 @@ using ngo_webapp.Models.Entities;
 namespace ngo_webapp.Areas.Admin.Controllers;
 
 [Area("Admin")]
-public class AppealsController(NgoManagementContext dbContext) : Controller
+public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsController> logger, IConfiguration configuration) : Controller
 {
-	private readonly NgoManagementContext _dbContext = dbContext;
+	private readonly ILogger<AppealsController> _logger = logger;
+	public readonly NgoManagementContext _dbContext = dbContext;
+	private readonly IConfiguration _configuration = configuration;
 
 	// GET: Admin/Appeals
 	public async Task<IActionResult> List()
@@ -33,10 +35,20 @@ public class AppealsController(NgoManagementContext dbContext) : Controller
 	// POST: Admin/Appeals/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> CreateEvent([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal)
+	public async Task<IActionResult> CreateEvent([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
 	{
 		if (ModelState.IsValid)
 		{
+			if (file != null && file.Length > 0)
+			{
+				var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
+				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
+				using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
+				{
+					await file.CopyToAsync(streams);
+				}
+				appeal.AppealsImage = fileName;
+			}
 			_dbContext.Add(appeal);
 			await _dbContext.SaveChangesAsync();
 			return RedirectToAction(nameof(List));
@@ -58,7 +70,7 @@ public class AppealsController(NgoManagementContext dbContext) : Controller
 	// POST: Admin/Appeals/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> UpdateEvent(int id, [Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal)
+	public async Task<IActionResult> UpdateEvent(int id, [Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
 	{
 		if (id == appeal.AppealsId)
 		{
@@ -66,6 +78,16 @@ public class AppealsController(NgoManagementContext dbContext) : Controller
 			{
 				try
 				{
+					if (file != null && file.Length > 0)
+					{
+						var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
+						var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
+						using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
+						{
+							await file.CopyToAsync(streams);
+						}
+						appeal.AppealsImage = fileName;
+					}
 					_dbContext.Update(appeal);
 					await _dbContext.SaveChangesAsync();
 				}
