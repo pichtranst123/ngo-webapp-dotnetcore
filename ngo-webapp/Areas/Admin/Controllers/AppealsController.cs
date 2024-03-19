@@ -41,13 +41,13 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 		{
 			if (file != null && file.Length > 0)
 			{
-				var filename = DateTime.Now.Ticks + file.FileName;
-				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", filename);
+				var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
+				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
 				using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
 				{
 					await file.CopyToAsync(streams);
 				}
-				appeal.AppealsImage = filename;
+				appeal.AppealsImage = fileName;
 			}
 			_dbContext.Add(appeal);
 			await _dbContext.SaveChangesAsync();
@@ -80,13 +80,13 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 				{
 					if (file != null && file.Length > 0)
 					{
-						var filename = DateTime.Now.Ticks + file.FileName;
-						var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", filename);
+						var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
+						var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
 						using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
 						{
 							await file.CopyToAsync(streams);
 						}
-						appeal.AppealsImage = filename;
+						appeal.AppealsImage = fileName;
 					}
 					_dbContext.Update(appeal);
 					await _dbContext.SaveChangesAsync();
