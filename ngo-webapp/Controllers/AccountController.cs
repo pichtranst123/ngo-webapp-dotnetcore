@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using ngo_webapp.Models;
 using ngo_webapp.Models.Entities;
 
@@ -126,6 +128,9 @@ public class AccountController : Controller
 				Username = user.Username,
 				RegistrationDate = user.RegistrationDate,
 				Balance = user.Balance,
+				Bio = user.Bio,
+				UserImage = user.UserImage,
+				Email = user.Email,
 				Donations = donations,
 				TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
 				ProjectCount = donations.Select(d => d.AppealId).Distinct().Count()
@@ -133,4 +138,53 @@ public class AccountController : Controller
 			return View(model);
 		}
 	}
+
+	[HttpGet]
+	public IActionResult Edit() => View();
+
+	[HttpPost]
+	public async Task<IActionResult> Edit(EditProfileViewModel model, IFormFile file)
+	{
+		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID"))){
+			return RedirectToAction("Login", "Account");
+		}
+		var userId = int.Parse(HttpContext.Session.GetString("UserID"));
+		
+		using(NgoManagementContext context = new())
+		{
+			try
+			{
+				var user = await context.Users.FindAsync(userId);
+				if (user == null)
+				{
+					return NotFound();
+				}
+				if (file != null && file.Length > 0)
+				{
+					var filename = DateTime.Now.Ticks + file.FileName;
+					var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", filename);
+					using (var stream = new FileStream(filePath, FileMode.Create)) //to upload the pic into the folder we've created
+					{
+						await file.CopyToAsync(stream);
+					}
+					user.UserImage = filename;
+				}
+
+				user.Username = model.Username;
+				user.Bio = model.Bio;
+				
+				await context.SaveChangesAsync();
+
+				return RedirectToAction("Profile", "Account");
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("Error", ex.Message);
+				return View();
+			}
+			
+        }
+	}
+
+
 }

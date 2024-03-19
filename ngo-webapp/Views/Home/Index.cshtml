@@ -184,7 +184,7 @@
 						</div>
 						<div class="cases-caption">
 							<h3 style="display:inline-flex;">
-								<a href="#">@appeal.AppealsName</a>
+								<a href="@Url.Action("BlogDetail", "Home", new { appealId = appeal.AppealsId })">@appeal.AppealsName</a>
 								<p style="padding-left:10rem;"><b style="color:red">End:</b>@appeal.EndDate.ToShortDateString()</p>
 							</h3>
 							<h4 style="margin-top:-3rem;color:black">Description:<p style="color:black">@appeal.Description</p></h4>

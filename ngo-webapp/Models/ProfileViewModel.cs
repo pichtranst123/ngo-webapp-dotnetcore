@@ -7,7 +7,10 @@ public class ProfileViewModel
     public decimal Balance { get; set; }
     public decimal TotalAmount { get; set; }
     public int ProjectCount { get; set; }
-    public List<DonationDetail> Donations { get; set; } = new List<DonationDetail>();
+    public string Bio {  get; set; }
+    public string Email {  get; set; }
+	public string? UserImage { get; set; }
+	public List<DonationDetail> Donations { get; set; } = new List<DonationDetail>();
 
 
     public class DonationDetail
