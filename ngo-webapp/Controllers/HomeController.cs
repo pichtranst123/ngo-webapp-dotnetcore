@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ngo_webapp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-
+using System.Security.Claims;
+using ngo_webapp.Models;
+using System.Reflection.Metadata;
 namespace donate_webapp.Controllers;
 
 public class HomeController(NgoManagementContext context) : Controller
@@ -41,14 +43,14 @@ public class HomeController(NgoManagementContext context) : Controller
 		if (totalDonationsForAppeal + amount > appeal.Amount)
 		{
 			ModelState.AddModelError("", "Donation exceeds the appeal goal.");
-			return View(); // Return with error
+			return View();
 		}
 
 		// Check if the user has enough balance
 		if (user.Balance < amount)
 		{
 			ModelState.AddModelError("", "Insufficient balance for this donation.");
-			return View(); // Return with error
+			return View();
 		}
 
 		// Deduct the donation amount from the user's balance
@@ -69,15 +71,60 @@ public class HomeController(NgoManagementContext context) : Controller
 		return RedirectToAction("Index");
 	}
 
-
+	[Route("Home/BlogDetail/{appealId:int}")]
 	public async Task<IActionResult> BlogDetail(int appealId)
 	{
-		var blogs = await _context.Blogs
-			.Where(b => b.AppealId == appealId)
-			.ToListAsync(); // Temporarily remove any .Include() calls
+		var blog = await _context.Blogs
+			.FirstOrDefaultAsync(b => b.AppealId == appealId); 
+		var comments = await _context.Comments
+			.Where(c => c.BlogId == blog.BlogId)
+			.ToListAsync();
 
-		return View(blogs);
+		var blogViewModel = new BlogViewModel
+		{
+			BlogId = blog.BlogId,
+			Title = blog.Title,
+			Content = blog.Content,
+			CreationDate = blog.CreationDate,
+		};
+
+		var model = Tuple.Create(blogViewModel, comments.AsEnumerable());
+
+		return View(model);
 	}
+
+
+	[HttpPost]
+	public async Task<IActionResult> AddComment(int BlogId, string Content)
+	{/*
+		if (!User.Identity.IsAuthenticated)
+		{
+			return RedirectToAction("Login", "Account");
+		}*/
+		var blog = await _context.Blogs.FindAsync(BlogId); // Make sure this line exists before you use 'blog'
+
+		var userIdString = HttpContext.Session.GetString("UserID") ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+		if (!int.TryParse(userIdString, out var userId))
+		{
+			return RedirectToAction("BlogDetail", new { id = BlogId });
+		}
+
+		var comment = new Comment
+		{
+			Content = Content,
+			CreationDate = DateTime.Now,
+			UserId = userId,
+			BlogId = BlogId
+			// ParentCommentId can be set here if you're implementing nested comments
+		};
+
+		_context.Comments.Add(comment);
+		await _context.SaveChangesAsync();
+
+		return RedirectToAction("BlogDetail", new { id = blog.AppealId });
+	}
+
+
 }
 
 

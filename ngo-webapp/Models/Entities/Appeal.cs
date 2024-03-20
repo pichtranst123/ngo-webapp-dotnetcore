@@ -13,7 +13,7 @@ public partial class Appeal
 
     public string? Description { get; set; }
 
-    public DateTime? CreationDate { get; set; }
+    public DateTime CreationDate { get; set; }
 
     public DateTime EndDate { get; set; }
 

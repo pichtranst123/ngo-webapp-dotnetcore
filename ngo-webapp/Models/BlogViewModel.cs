@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ngo_webapp.Models.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ngo_webapp.Models;
 
@@ -19,5 +20,6 @@ public class BlogViewModel
 	[Required]
 	public int AppealID { get; set; }
 	[Required]
-	public int UserID { get; set; }
+	public int UserId { get; set; }
+	public IEnumerable<Comment> Comments { get; set; }
 }

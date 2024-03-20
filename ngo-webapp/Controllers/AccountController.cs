@@ -211,4 +211,50 @@ public class AccountController : Controller
         }
     }
 
+    [HttpGet]
+    public IActionResult Faucet()
+    {
+        if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+        {
+            return RedirectToAction("Login");
+        }
+
+        return View(new FaucetViewModel());
+    }
+
+
+
+    [HttpPost]
+    public async Task<IActionResult> Faucet(FaucetViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var userIdString = HttpContext.Session.GetString("UserID");
+        if (string.IsNullOrEmpty(userIdString))
+        {
+            return RedirectToAction("Login");
+        }
+
+        var userId = int.Parse(userIdString);
+        using (var context = new NgoManagementContext())
+        {
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "User not found.");
+                return View(model);
+            }
+
+            user.Balance += model.AmountToAdd;
+            await context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("Profile");
+    }
+
+
+
 }

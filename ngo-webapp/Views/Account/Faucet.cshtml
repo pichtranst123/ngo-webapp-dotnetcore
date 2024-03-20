@@ -1,0 +1,30 @@
+﻿@model ngo_webapp.Models.FaucetViewModel
+
+@{
+    ViewData["Title"] = "Add Balance";
+
+}
+
+<h2>@ViewData["Title"]]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Faucet" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AmountToAdd" class="control-label">Amount to Add</label>
+                <input asp-for="AmountToAdd" class="form-control" />
+                <span asp-validation-for="AmountToAdd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add to Balance" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
