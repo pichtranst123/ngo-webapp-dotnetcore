@@ -30,7 +30,6 @@ public class BlogController : Controller
 			bl.BlogId = model.BlogId;
 			bl.Title = model.Title;
 			bl.Content = model.Content;
-			bl.UserId = model.UserID;
 			bl.CreationDate = model.CreationDate;
 			bl.AppealId = model.AppealID;
 			await _dbContext.Blogs.AddAsync(bl);

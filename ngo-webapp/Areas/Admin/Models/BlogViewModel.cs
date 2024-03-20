@@ -11,8 +11,7 @@ public class BlogViewModel
 	public string Title { get; set; } = string.Empty;
 	[Required]
 	public string Content { get; set; }
-	[Required]
-	public int UserID { get; set; }
+
 	[Required]
 	public string BlogImage { get; set; }
 	[Required]

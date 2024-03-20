@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ngo_webapp.Models.DonateViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donation Report</title>
+</head>
+<body>
+    <h1>Donation Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Appeal Name</th>
+                <th>Amount</th>
+                <th>Donation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donation in Model)
+            {
+                <tr>
+                    <td>@donation.UserName</td>
+                    <td>@donation.AppealName</td>
+                    <td>@donation.Amount$</td>
+                    <td>@donation.DonationDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
