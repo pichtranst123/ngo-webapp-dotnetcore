@@ -118,6 +118,7 @@ public class AccountController : Controller
 				.Include(d => d.Appeals)
 				.Select(d => new ProfileViewModel.DonationDetail
 				{
+					AppealId = d.AppealsId, 
 					AppealName = d.Appeals.AppealsName,
 					Amount = d.Amount,
 					DonationDate = d.DonationDate
@@ -183,8 +184,31 @@ public class AccountController : Controller
 				ModelState.AddModelError("Error", ex.Message);
 				return View();
 			}
-
 		}
 	}
+    public async Task<IActionResult> Export(int appealId)
+    {
+        using (var context = new NgoManagementContext())
+        {
+            var donations = await context.Donations
+                .Where(d => d.AppealsId == appealId)
+                .Include(d => d.User) 
+                .Include(d => d.Appeals) 
+                .Select(d => new DonateViewModel
+                {
+                    UserName = d.User.Username,
+                    AppealName = d.Appeals.AppealsName,
+                    Amount = d.Amount,
+                    DonationDate = d.DonationDate
+                })
+                .ToListAsync();
+
+            // Use "DonationsPdf" Razor view to generate the PDF content !!!!!!!
+            return new Rotativa.AspNetCore.ViewAsPdf("DonationsPdf", donations)
+            {
+                FileName = $"Donations-{DateTime.Now.ToString("yyyyMMddHHmmss")}.pdf"
+            };
+        }
+    }
 
 }

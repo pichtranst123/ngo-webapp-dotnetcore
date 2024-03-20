@@ -1,6 +1,8 @@
 using ngo_webapp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
+using ServiceStack.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,6 @@ builder.Services.AddSession(options =>
 //Configure Entity Framework and DbContext
 builder.Services.AddDbContext<NgoManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionString")));
-
 
 // Configure authentication services here (if you decide to use ASP.NET Core Identity or similar)
 
@@ -47,14 +48,14 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseSession();
-
+RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
 app.MapRazorPages();
 app.UseEndpoints(endpoints =>
 {
 endpoints.MapControllerRoute(
        name: "admin",
        pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
-       new { area = "Admin" } // Đặt area là "Admin"
+       new { area = "Admin" } // named area là "Admin"
    );
 });
 app.Run();

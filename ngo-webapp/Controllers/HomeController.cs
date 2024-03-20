@@ -64,7 +64,6 @@ public class HomeController(NgoManagementContext context) : Controller
 		};
 		_context.Donations.Add(donation);
 
-		// Update the user's balance in the database
 		_context.Users.Update(user);
 		await _context.SaveChangesAsync();
 		return RedirectToAction("Index");

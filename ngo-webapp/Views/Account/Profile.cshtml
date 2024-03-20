@@ -197,7 +197,11 @@
 									<td>@donation.AppealName</td>
 									<td>@donation.Amount$</td>
 									<td>@donation.DonationDate.ToShortDateString()</td>
-									<td><a class="genric-btn danger circle" href="@Url.Action("Export", "Account", new {appealid = donation.AppealId})">Export</a></td>
+									<td>
+										<a class="genric-btn danger circle" href="@Url.Action("Export", "Account", new { appealId = donation.AppealId })">
+											Export
+										</a>
+									</td>
 								</tr>
 							}
 						</tbody>
