@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ngo_webapp.Areas.Admin.Models;
 using ngo_webapp.Models.Entities;
 
-namespace ngo_webapp.Areas.Admin.Controllers;
-[Area("Admin")]
+namespace ngo_webapp.Controllers;
 public class BlogController : Controller
 {
     private readonly NgoManagementContext _dbContext;
@@ -21,32 +19,24 @@ public class BlogController : Controller
 	public async Task<IActionResult> Show()
 	{
         var blogs = await _dbContext.Blogs.ToListAsync();
-        var app = await _dbContext.Appeals.ToListAsync();
-        ViewBag.Ids = new List<int>();
-        foreach (var item in app)
-        {
-            ViewBag.Ids.Add(item.AppealsId);
-        }
         return View(blogs);
 	}
 	[HttpGet]
     public IActionResult Add()
     {
-
         return View();
     }
 	[HttpPost]
     public async Task<IActionResult> Add(BlogViewModel model)
 	{
-        
-        Blog bl = new();
+		Blog bl = new();
 		try
-		{ 
+		{
+			bl.BlogId = model.BlogId;
 			bl.Title = model.Title;
 			bl.Content = model.Content;
 			bl.CreationDate = model.CreationDate;
-			bl.UserId = model.UserID;
-			bl.AppealId = model.AppealID;
+			bl.UserId = model.;
 			await _dbContext.Blogs.AddAsync(bl);
 			await _dbContext.SaveChangesAsync();
 			return RedirectToAction("Show", "Blog");
@@ -66,7 +56,7 @@ public class BlogController : Controller
 		_dbContext.Blogs.Remove(blog);
 		_dbContext.SaveChanges();
 
-		return RedirectToAction("Show");
+		return RedirectToAction("Index");
 	}
 
 	public ActionResult Edit(int id)
@@ -74,7 +64,7 @@ public class BlogController : Controller
 
 		var blog = _dbContext.Blogs.Find(id);
 
-		return View("Edit");
+		return View("Index");
 	}
 
 	[HttpPost]
@@ -89,6 +79,6 @@ public class BlogController : Controller
 
 		_dbContext.SaveChanges();
 
-		return RedirectToAction("Show");
+		return RedirectToAction("Index");
 	}
 }

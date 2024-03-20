@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ngo_webapp.Areas.Admin.Models;
+namespace ngo_webapp.Models;
 
 public class BlogViewModel
 {
@@ -18,5 +18,6 @@ public class BlogViewModel
 	public DateTime CreationDate { get; set; }
 	[Required]
 	public int AppealID { get; set; }
-    public int UserId { get; internal set; }
+	[Required]
+	public int UserID { get; set; }
 }
