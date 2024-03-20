@@ -68,10 +68,20 @@
 										<i class="icon-envelope-open"></i>
 										<span class="ml-2">Inbox </span>
 									</a>
-									<a href="" class="dropdown-item">
-										<i class="icon-key"></i>
-										<span class="ml-2">Logout </span>
-									</a>
+									<div>
+										@if (string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+										{
+											<a class="genric-btn info circle" asp-controller="Account" asp-action="Login">Login</a>
+										}
+										else
+										{
+											<a class="genric-btn success circle" style="margin-right:5px" asp-controller="Account" asp-action="Profile">My Profile</a>
+
+											<form asp-controller="Account" asp-action="Logout" method="post">
+												<button type="submit" class="genric-btn danger circle">Logout</button>
+											</form>
+										}
+									</div>
 								</div>
 							</li>
 						</ul>
@@ -91,10 +101,8 @@
 						</a>
 						<ul aria-expanded="false">
 
-							<li><a href="@Url.Action("List", "Donate")">Donation</a></li>
 							<li><a href="@Url.Action("List", "Appeals")">Campaign</a></li>
 							<li><a href="@Url.Action("List", "Blog")">Blogs</a></li>
-							<li><a href="@Url.Action("List", "Users")">Users</a></li>
 
 						</ul>
 					</li>
@@ -105,8 +113,7 @@
 							<i class="icon icon-single-copy-06"></i><span class="nav-text">Pages</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a href="">Register</a></li>
-							<li><a href="">Login</a></li>
+							<li><a href="">Logout</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -130,7 +137,7 @@
 						@RenderBody();
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 

@@ -1,8 +1,8 @@
-@model ngo_webapp.Models.Entities.Appeal
+﻿@model ngo_webapp.Models.Entities.Appeal
 
 @{
-    ViewData["Title"] = "Edit Event";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+	ViewData["Title"] = "Edit Event";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="card">
@@ -10,9 +10,12 @@
 		<h4 class="card-title">Edit Event</h4>
 	</div>
 	<div class="card-body">
-		@if (Model == null) { 
+		@if (Model == null)
+		{
 			<p>This event is not exists</p>
-		} else {
+		}
+		else
+		{
 			<div class="col-lg-12">
 				<form class="row" asp-action="UpdateEvent" method="post" enctype="multipart/form-data">
 					<div class="mt-3 col-lg-1">
@@ -61,11 +64,11 @@
 					</div>
 
 					<div class="mt-3 col-lg-12">
-						<button type="submit" class="btn btn-outline-success">Create</button>
+						<a type="submit" class="btn btn-outline-success">Update</a>
 					</div>
 				</form>
-				<div><button class="btn btn-outline-info" asp-controller="Appeals" asp-action="List">Return to Event Page</button></div>
 			</div>
 		}
 	</div>
 </div>
+<div><a class="btn btn-outline-info" asp-controller="Appeals" asp-action="List">Return to Event Page</a></div>

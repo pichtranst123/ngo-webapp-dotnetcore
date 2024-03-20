@@ -2,40 +2,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ngo_webapp.Models.Entities;
 
-namespace ngo_webapp.Areas.Admin.Controllers;
+namespace ngo_webapp.Controllers;
 
-[Area("Admin")]
 public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsController> logger, IConfiguration configuration) : Controller
 {
 	private readonly ILogger<AppealsController> _logger = logger;
 	public readonly NgoManagementContext _dbContext = dbContext;
 	private readonly IConfiguration _configuration = configuration;
 
-	// GET: Admin/Appeals
+	// GET: Appeals/List
 	public async Task<IActionResult> List()
 	{
 		var appeals = await _dbContext.Appeals.ToListAsync();
 		return View(appeals);
 	}
 
-	// GET: Admin/Appeals/Details/5
-	public async Task<IActionResult> Details(int? id)
-	{
-		if (id != null)
-		{
-			var appeal = await _dbContext.Appeals.FirstOrDefaultAsync(m => m.AppealsId == id);
-			return appeal != null ? View(appeal) : NotFound();
-		}
-		return NotFound();
-	}
-
-	// GET: Admin/Appeals/Create
+	// GET: Appeals/Create
 	public IActionResult Create() => View();
 
-	// POST: Admin/Appeals/Create
+	// POST: Appeals/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> CreateEvent([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
+	public async Task<IActionResult> Create([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
 	{
 		if (ModelState.IsValid)
 		{
@@ -56,7 +44,7 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 		return View(appeal);
 	}
 
-	// GET: Admin/Appeals/Edit/5
+	// GET: Appeals/Edit/5
 	public async Task<IActionResult> Update(int? id)
 	{
 		if (id != null)
@@ -67,7 +55,7 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 		return NotFound();
 	}
 
-	// POST: Admin/Appeals/Edit/5
+	// POST: Appeals/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> UpdateEvent(int id, [Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
@@ -112,7 +100,11 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 		if (id != null)
 		{
 			var appeal = await _dbContext.Appeals.FirstOrDefaultAsync(m => m.AppealsId == id);
-			return appeal != null ? View(appeal) : NotFound();
+			if (appeal != null)
+			{
+				return View(appeal);
+			}
+			return NotFound();
 		}
 		return NotFound();
 	}

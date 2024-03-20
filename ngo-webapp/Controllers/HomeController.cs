@@ -14,10 +14,6 @@ public class HomeController(NgoManagementContext context) : Controller
 		return View(appeals);
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5e7047f48a6768fb60e7cd64c4d3616fdf36defd
 	[HttpPost]
 	public async Task<IActionResult> Donate(int appealId, decimal amount)
 	{
