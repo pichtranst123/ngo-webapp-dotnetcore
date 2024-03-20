@@ -25,7 +25,8 @@
 
 	<!-- Main wrapper -->
 	<div id="main-wrapper">
-
+		@if (Context.Session.GetString("Is_Admin") == "True")
+		{
 		<!-- Nav header -->
 		<div class="nav-header">
 			<a href="@Url.Action("Index", "Admin")" class="brand-logo">
@@ -60,18 +61,20 @@
 									<i class="mdi mdi-account"></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="" class="dropdown-item">
-										<i class="icon-user"></i>
-										<span class="ml-2">Profile </span>
-									</a>
-									<a href="" class="dropdown-item">
-										<i class="icon-envelope-open"></i>
-										<span class="ml-2">Inbox </span>
-									</a>
-									<a href="" class="dropdown-item">
-										<i class="icon-key"></i>
-										<span class="ml-2">Logout </span>
-									</a>
+						
+							
+									<div>
+										@if (string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+										{
+											<a class="genric-btn info circle" asp-controller="Account" asp-action="Login">Login</a>
+										}
+										else
+										{
+											<form asp-controller="Account" asp-action="Logout" method="post">
+												<button type="submit" class="genric-btn danger circle">Logout</button>
+											</form>
+										}
+									</div>
 								</div>
 							</li>
 						</ul>
@@ -89,30 +92,26 @@
 						<a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="icon icon-single-04"></i><span class="nav-text">Dashboard</span>
 						</a>
-						<ul aria-expanded="false">
-
-							
+						<ul aria-expanded="false">							
 							<li><a href="@Url.Action("List", "Appeals")">Campaign</a></li>
-							<li><a href="@Url.Action("Show", "Blog")">Blogs</a></li>
-							
-
+							<li><a href="@Url.Action("Index", "Blog")">Blogs</a></li>	
 						</ul>
 					</li>
 
-					<li class="nav-label">Extra</li>
-					<li>
-						<a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="icon icon-single-copy-06"></i><span class="nav-text">Pages</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="">Register</a></li>
-							<li><a href="">Login</a></li>
-						</ul>
-					</li>
+			
 				</ul>
 			</div>
 		</div>
+			}
+			else
+			{
+			<div class="alert alert-warning" role="alert">
+				You must be an admin and logged in to view this content.
+			</div>
+			<!-- Provide a link or button to go to the login page -->
+			<a class="btn btn-primary" href="@Url.Action("LoginAdmin", "Admin")">Go to Login Page</a>
 
+			}
 		<!-- Content -->
 		<div class="content-body">
 			<div class="container-fluid">
@@ -127,10 +126,10 @@
 
 				<div class="row">
 					<div class="col-lg-12">
-						@RenderBody();
+						@RenderBody()
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 

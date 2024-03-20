@@ -1,0 +1,35 @@
+﻿@model List<ngo_webapp.Models.Entities.Appeal>
+@{
+    Layout = "_AdminLayout";
+}
+<h1>Appeals List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Appeal Name</th>
+            <th>Organization</th>
+            <th>Description</th>
+            <th>End Date</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appeal in Model)
+        {
+            <tr>
+                <td>@appeal.AppealsName</td>
+                <td>@appeal.Organization</td>
+                <td>@appeal.Description</td>
+                <td>@appeal.EndDate.ToShortDateString()</td>
+                <td>@appeal.Amount.ToString("C")</td>
+                <td>
+                    <a asp-action="Update" asp-route-id="@appeal.AppealsId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@appeal.AppealsId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Create">Create New</a>

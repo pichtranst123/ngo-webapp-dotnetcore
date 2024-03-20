@@ -146,12 +146,13 @@ public class AccountController : Controller
 	[HttpPost]
 	public async Task<IActionResult> Edit(EditProfileViewModel model, IFormFile file)
 	{
-		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID"))){
+		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+		{
 			return RedirectToAction("Login", "Account");
 		}
 		var userId = int.Parse(HttpContext.Session.GetString("UserID"));
-		
-		using(NgoManagementContext context = new())
+
+		using (NgoManagementContext context = new())
 		{
 			try
 			{
@@ -173,7 +174,7 @@ public class AccountController : Controller
 
 				user.Username = model.Username;
 				user.Bio = model.Bio;
-				
+
 				await context.SaveChangesAsync();
 
 				return RedirectToAction("Profile", "Account");
@@ -183,10 +184,8 @@ public class AccountController : Controller
 				ModelState.AddModelError("Error", ex.Message);
 				return View();
 			}
-			
-        }
+		}
 	}
-
     public async Task<IActionResult> Export(int appealId)
     {
         using (var context = new NgoManagementContext())
@@ -211,8 +210,5 @@ public class AccountController : Controller
             };
         }
     }
-
-
-
 
 }

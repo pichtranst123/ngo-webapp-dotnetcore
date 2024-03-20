@@ -1,17 +1,17 @@
 ﻿@model ngo_webapp.Models.Entities.Blog
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Update</h1>
 
 <h4>Blog</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BlogId" />
             <div class="form-group">

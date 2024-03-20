@@ -1,0 +1,37 @@
+﻿@model ngo_webapp.Models.AppealViewModelAD
+@{
+    Layout = "_AdminLayout";
+}
+<h1>Edit Appeal</h1>
+
+<form asp-action="Update" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="AppealsId" />
+
+    <div class="form-group">
+        <label asp-for="AppealsName"></label>
+        <input asp-for="AppealsName" class="form-control" />
+        <span asp-validation-for="AppealsName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Organization"></label>
+        <input asp-for="Organization" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="AppealImageFile"></label>
+        <input asp-for="AppealImageFile" type="file" class="form-control-file" />
+        <span asp-validation-for="AppealImageFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

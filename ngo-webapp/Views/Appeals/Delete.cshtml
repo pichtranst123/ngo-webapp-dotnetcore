@@ -1,0 +1,18 @@
+﻿@model ngo_webapp.Models.Entities.Appeal
+@{
+    Layout = "_AdminLayout";
+}
+<h1>Delete Appeal</h1>
+
+<div>
+    <h4>Are you sure you want to delete this appeal?</h4>
+    <div>
+        <h4>Appeal Name: @Model.AppealsName</h4>
+        <h4>Organization: @Model.Organization</h4>
+    </div>
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="AppealsId" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="List">Back to List</a>
+    </form>
+</div>

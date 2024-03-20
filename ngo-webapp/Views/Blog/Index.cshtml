@@ -1,19 +1,14 @@
 ﻿@model IEnumerable<ngo_webapp.Models.Entities.Blog>
 
 @{
-    Layout = "_AdminLayout";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<!DOCTYPE html>
+<h1>Index</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Show</title>
-</head>
-<body>
 <p>
-        <a href="@Url.Action("Add")">Add</a> |
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -26,9 +21,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appeal)
             </th>
           
             <th></th>
@@ -47,17 +39,10 @@
                 @Html.DisplayFor(modelItem => item.CreationDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Appeal.AppealsId)
-            </td>
-           
-            <td>
-                <a  href="@Url.Action("Edit", new {Id=item.BlogId})">Edit</a> |
-                <a href="@Url.Action("Delete", new {Id=item.BlogId})">Details</a> |
-                <a href="@Url.Action("Edit", new {Id=item.BlogId})">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.BlogId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.BlogId">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-</body>
-</html>

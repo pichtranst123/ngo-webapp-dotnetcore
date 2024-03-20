@@ -1,23 +1,22 @@
-﻿@model ngo_webapp.Models.Entities.Blog
+﻿@model ngo_webapp.Models.BlogViewModelAD;
+
 
 @{
-    ViewData["Title"] = "Add";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-
 }
 
-<h1>Add</h1>
+<h1>Create</h1>
 
 <h4>Blog</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Add">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="AppealId" class="control-label"></label>
-                <input asp-for="AppealId" class="form-control" />
-                <span asp-validation-for="AppealId" class="text-danger"></span>
+                <input type="number" asp-for="AppealId" class="form-control" asp-items="ViewBag.AppealId"></input>
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -29,7 +28,11 @@
                 <input asp-for="Content" class="form-control" />
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" readonly />
+            </div>
+            <div class="form-group" style="display: none;">
                 <label asp-for="CreationDate" class="control-label"></label>
                 <input asp-for="CreationDate" class="form-control" />
                 <span asp-validation-for="CreationDate" class="text-danger"></span>
@@ -42,6 +45,5 @@
 </div>
 
 <div>
-    <a asp-action="Show">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
-
