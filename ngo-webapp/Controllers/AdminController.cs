@@ -26,11 +26,8 @@ public class AdminController : Controller
 						return RedirectToAction("Index", "Admin");
 					}
 				}
-				else
-				{
-					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-					return View(model);
-				}
+				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+				return View(model);
 			}
 		}
 		return View(model);

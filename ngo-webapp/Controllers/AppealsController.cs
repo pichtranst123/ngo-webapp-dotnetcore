@@ -1,39 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ngo_webapp.Models;
 using ngo_webapp.Models.Entities;
 
 namespace ngo_webapp.Controllers;
-
-public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsController> logger, IConfiguration configuration) : Controller
+public class AppealsController(NgoManagementContext dbContext) : Controller
 {
-	private readonly ILogger<AppealsController> _logger = logger;
-	public readonly NgoManagementContext _dbContext = dbContext;
-	private readonly IConfiguration _configuration = configuration;
+	private readonly NgoManagementContext _dbContext = dbContext;
 
-	// GET: Appeals/List
 	public async Task<IActionResult> List()
 	{
 		var appeals = await _dbContext.Appeals.ToListAsync();
 		return View(appeals);
 	}
 
-	// GET: Appeals/Create
 	public IActionResult Create() => View();
 
-	// POST: Appeals/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create([Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
+	public async Task<IActionResult> Create(AppealViewModel model)
 	{
 		if (ModelState.IsValid)
 		{
-			if (file != null && file.Length > 0)
+			Appeal appeal = new()
 			{
-				var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
-				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
-				using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
+				AppealsName = model.AppealsName,
+				Organization = model.Organization,
+				Description = model.Description,
+				EndDate = model.EndDate,
+				Amount = model.Amount,
+				CreationDate = DateTime.Now, // Set automatically
+				Status = true // Default value
+			};
+
+			if (model.AppealImageFile != null && model.AppealImageFile.Length > 0)
+			{
+				var fileName = Path.GetFileName(model.AppealImageFile.FileName);
+				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
-					await file.CopyToAsync(streams);
+					await model.AppealImageFile.CopyToAsync(stream);
 				}
 				appeal.AppealsImage = fileName;
 			}
@@ -41,47 +47,73 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 			await _dbContext.SaveChangesAsync();
 			return RedirectToAction(nameof(List));
 		}
-		return View(appeal);
+		return View(model);
 	}
 
-	// GET: Appeals/Edit/5
 	public async Task<IActionResult> Update(int? id)
 	{
 		if (id != null)
 		{
 			var appeal = await _dbContext.Appeals.FindAsync(id);
-			return appeal != null ? View(appeal) : NotFound();
+			if (appeal == null)
+			{
+				return NotFound();
+			}
+
+			AppealViewModel model = new()
+			{
+				AppealsId = appeal.AppealsId,
+				AppealsName = appeal.AppealsName,
+				Organization = appeal.Organization,
+				Description = appeal.Description,
+				EndDate = appeal.EndDate,
+				Amount = appeal.Amount,
+				ExistingImagePath = appeal.AppealsImage
+			};
+			return View(model);
 		}
 		return NotFound();
 	}
 
-	// POST: Appeals/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> UpdateEvent(int id, [Bind("AppealsId,AppealsName,Organization,Description,CreationDate,EndDate,Amount,Status,AppealsImage")] Appeal appeal, IFormFile file)
+	public async Task<IActionResult> Update(int id, AppealViewModel model)
 	{
-		if (id == appeal.AppealsId)
+		if (id == model.AppealsId)
 		{
 			if (ModelState.IsValid)
 			{
+				var appeal = await _dbContext.Appeals.FindAsync(id);
+				if (appeal == null)
+				{
+					return NotFound();
+				}
+
+				appeal.AppealsName = model.AppealsName;
+				appeal.Organization = model.Organization;
+				appeal.Description = model.Description;
+				appeal.EndDate = model.EndDate;
+				appeal.Amount = model.Amount;
+
+				if (model.AppealImageFile != null && model.AppealImageFile.Length > 0)
+				{
+					var fileName = Path.GetFileName(model.AppealImageFile.FileName);
+					var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+					using (var stream = new FileStream(filePath, FileMode.Create))
+					{
+						await model.AppealImageFile.CopyToAsync(stream);
+					}
+					appeal.AppealsImage = fileName; // Update the file name after upload
+				}
+
 				try
 				{
-					if (file != null && file.Length > 0)
-					{
-						var fileName = DateTime.Now.ToString("yyyymmddhhmmss") + file.FileName;
-						var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", fileName);
-						using (var streams = new FileStream(filePath, FileMode.Create)) // upload a pic into the folder
-						{
-							await file.CopyToAsync(streams);
-						}
-						appeal.AppealsImage = fileName;
-					}
 					_dbContext.Update(appeal);
 					await _dbContext.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (AppealExists(appeal.AppealsId))
+					if (AppealExists(model.AppealsId))
 					{
 						throw;
 					}
@@ -89,36 +121,63 @@ public class AppealsController(NgoManagementContext dbContext, ILogger<AppealsCo
 				}
 				return RedirectToAction(nameof(List));
 			}
-			return View(appeal);
+			return View(model);
 		}
 		return NotFound();
 	}
 
-	// GET: Admin/Appeals/Delete/5
-	public async Task<IActionResult> Delete(int? id)
+	//public async Task<IActionResult> Delete(int? id)
+	//{
+	//	if (id != null)
+	//	{
+	//		var appeal = await _dbContext.Appeals.FirstOrDefaultAsync(m => m.AppealsId == id);
+	//		if (appeal != null)
+	//		{
+	//			return View(appeal);
+	//		}
+	//		else
+	//		{
+	//			return NotFound();
+	//		}
+	//	}
+	//	return NotFound();
+	//}
+
+	//[HttpPost, ActionName("DeleteConfirmed")]
+	//[ValidateAntiForgeryToken]
+	//public async Task<IActionResult> DeleteConfirmed(int id)
+	//{
+	//	var appeal = await _dbContext.Appeals.FindAsync(id);
+	//	if (appeal != null)
+	//	{
+	//		_dbContext.Appeals.Remove(appeal);
+	//		await _dbContext.SaveChangesAsync();
+	//	}
+	//	return RedirectToAction(nameof(List));
+	//}
+
+	public async Task<IActionResult> Delete(int? apID, int? doID)
 	{
-		if (id != null)
+		if (apID != null)
 		{
-			var appeal = await _dbContext.Appeals.FirstOrDefaultAsync(m => m.AppealsId == id);
-			if (appeal != null)
+			var donation = await _dbContext.Donations.FirstOrDefaultAsync(n => n.DonationId == doID);
+			if (donation != null)
 			{
-				return View(appeal);
+				var appeal = await _dbContext.Appeals.FirstOrDefaultAsync(m => m.AppealsId == apID);
+				if (appeal != null)
+				{
+					_dbContext.Donations.Remove(donation);
+					_dbContext.Appeals.Remove(appeal);
+					await _dbContext.SaveChangesAsync();
+
+					return RedirectToAction(nameof(List));
+				}
+				return NotFound();
 			}
 			return NotFound();
 		}
 		return NotFound();
 	}
 
-	// POST: Admin/Appeals/Delete/5
-	[HttpPost, ActionName("Delete")]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> DeleteConfirmed(int id)
-	{
-		var appeal = await _dbContext.Appeals.FindAsync(id);
-		_dbContext.Appeals.Remove(appeal);
-
-		await _dbContext.SaveChangesAsync();
-		return RedirectToAction(nameof(List));
-	}
 	private bool AppealExists(int id) => _dbContext.Appeals.Any(e => e.AppealsId == id);
 }

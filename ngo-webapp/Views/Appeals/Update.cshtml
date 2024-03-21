@@ -1,4 +1,4 @@
-﻿@model ngo_webapp.Models.Entities.Appeal
+﻿@model ngo_webapp.Models.AppealViewModel
 
 @{
 	ViewData["Title"] = "Edit Event";
@@ -7,7 +7,7 @@
 
 <div class="card">
 	<div class="card-header">
-		<h4 class="card-title">Edit Event</h4>
+		<h4 class="card-title">Edit Campaign</h4>
 	</div>
 	<div class="card-body">
 		@if (Model == null)
@@ -17,39 +17,34 @@
 		else
 		{
 			<div class="col-lg-12">
-				<form class="row" asp-action="UpdateEvent" method="post" enctype="multipart/form-data">
+				<form class="row" asp-controller="Appeals" asp-action="Update" method="post">
 					<div class="mt-3 col-lg-1">
-						<lable class="form-label">ID</lable>
+						<lable class="form-label" asp-for="AppealsId">ID</lable>
 						<input type="text" class="form-control" asp-for="AppealsId" readonly />
 					</div>
 
 					<div class="mt-3 col-lg-3">
-						<lable class="form-label">Name</lable>
+						<lable class="form-label" asp-for="AppealsName">Name</lable>
 						<input type="text" class="form-control" asp-for="AppealsName" />
 					</div>
 
 					<div class="mt-3 col-lg-3">
-						<lable class="form-label">Your Organize</lable>
+						<lable class="form-label" asp-for="Organization">Your Organize</lable>
 						<input type="text" class="form-control" asp-for="Organization" />
 					</div>
 
 					<div class="mt-3 col-lg-5">
-						<lable class="form-label">Description</lable>
+						<lable class="form-label" asp-for="Description">Description</lable>
 						<input type="text" class="form-control" asp-for="Description" />
 					</div>
 
-					<div class="mt-3 col-lg-2">
-						<lable class="form-label">Create Date</lable>
-						<input type="date" class="form-control" asp-for="CreationDate" readonly />
-					</div>
-
 					<div class="mt-3  col-lg-2">
-						<lable class="form-label">End Date</lable>
+						<lable class="form-label" asp-for="EndDate">End Date</lable>
 						<input type="text" class="form-control" asp-for="EndDate" />
 					</div>
 
 					<div class="mt-3  col-lg-2">
-						<lable class="form-label">Donation Limit</lable>
+						<lable class="form-label" asp-for="Amount">Donation Limit</lable>
 						<input type="text" class="form-control" asp-for="Amount" />
 					</div>
 
@@ -59,16 +54,16 @@
 					</div>
 
 					<div class="mt-3 col-lg-5">
-						<lable class="form-label">Images</lable>
-						<input type="file" class="form-control" asp-for="AppealsImage" accept=".jpg, .jpeg, .png" />
+						<lable class="form-label" asp-for="AppealImageFile">Images</lable>
+						<input type="file" class="form-control" asp-for="AppealImageFile" accept=".jpg, .jpeg, .png" />
 					</div>
 
 					<div class="mt-3 col-lg-12">
-						<a type="submit" class="btn btn-outline-success">Update</a>
+						<button type="submit" class="btn btn-outline-success">Update</button>
 					</div>
 				</form>
 			</div>
 		}
 	</div>
 </div>
-<div><a class="btn btn-outline-info" asp-controller="Appeals" asp-action="List">Return to Event Page</a></div>
+<div><a class="btn btn-primary" asp-controller="Appeals" asp-action="List">Return to Event Page</a></div>
