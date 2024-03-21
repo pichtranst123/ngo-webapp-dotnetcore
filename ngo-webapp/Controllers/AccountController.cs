@@ -110,7 +110,7 @@ public class AccountController : Controller
 			var user = await context.Users.FindAsync(userId);
 			if (user == null)
 			{
-				return NotFound();
+				return View("NotFoundPage");
 			}
 
 			var donations = await context.Donations
@@ -130,7 +130,7 @@ public class AccountController : Controller
 				RegistrationDate = user.RegistrationDate,
 				Balance = user.Balance,
 				Bio = user.Bio,
-				UserImage = user.UserImage,
+				UserImage = user.UserImage==null? "default.jpg" : user.UserImage,
 				Email = user.Email,
 				Donations = donations,
 				TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
@@ -159,7 +159,7 @@ public class AccountController : Controller
 				var user = await context.Users.FindAsync(userId);
 				if (user == null)
 				{
-					return NotFound();
+					return View("NotFoundPage");
 				}
 				if (file != null && file.Length > 0)
 				{
