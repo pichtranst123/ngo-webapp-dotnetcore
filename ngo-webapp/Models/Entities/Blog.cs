@@ -13,7 +13,7 @@ public partial class Blog
 
     public string Content { get; set; } = null!;
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public DateTime CreationDate { get; set; }
 
@@ -21,5 +21,5 @@ public partial class Blog
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

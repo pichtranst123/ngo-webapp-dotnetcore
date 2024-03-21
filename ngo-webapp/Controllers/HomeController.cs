@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using ngo_webapp.Models;
 using System.Reflection.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace donate_webapp.Controllers;
 
 public class HomeController(NgoManagementContext context) : Controller
@@ -28,13 +29,13 @@ public class HomeController(NgoManagementContext context) : Controller
 		var user = await _context.Users.FindAsync(userId);
 		if (user == null)
 		{
-			return NotFound("User not found");
+			return View("NotFoundPage");
 		}
 
 		var appeal = await _context.Appeals.FindAsync(appealId);
 		if (appeal == null)
 		{
-			return NotFound("Appeal not found");
+			return View("NotFoundPage");
 		}
 
 		// Calculate the total donations for this appeal to ensure it doesn't exceed the goal
@@ -75,10 +76,15 @@ public class HomeController(NgoManagementContext context) : Controller
 	public async Task<IActionResult> BlogDetail(int appealId)
 	{
 		var blog = await _context.Blogs
-			.FirstOrDefaultAsync(b => b.AppealId == appealId); 
+			.FirstOrDefaultAsync(b => b.AppealId == appealId);
+		if (blog == null)
+		{
+			return View("NotFoundPage");
+		}
 		var comments = await _context.Comments
 			.Where(c => c.BlogId == blog.BlogId)
 			.ToListAsync();
+
 
 		var blogViewModel = new BlogViewModel
 		{
@@ -96,11 +102,11 @@ public class HomeController(NgoManagementContext context) : Controller
 
 	[HttpPost]
 	public async Task<IActionResult> AddComment(int BlogId, string Content)
-	{/*
-		if (!User.Identity.IsAuthenticated)
+	{
+		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
 		{
 			return RedirectToAction("Login", "Account");
-		}*/
+		}
 		var blog = await _context.Blogs.FindAsync(BlogId); // Make sure this line exists before you use 'blog'
 
 		var userIdString = HttpContext.Session.GetString("UserID") ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -123,6 +129,8 @@ public class HomeController(NgoManagementContext context) : Controller
 
 		return RedirectToAction("BlogDetail", new { id = blog.AppealId });
 	}
+
+	public IActionResult NotFoundPage() => View();
 
 
 }
