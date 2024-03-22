@@ -20,19 +20,23 @@ public partial class NgoManagementContext : DbContext
 
     public virtual DbSet<Blog> Blogs { get; set; }
 
+    public virtual DbSet<Comment> Comments { get; set; }
+
     public virtual DbSet<Donation> Donations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=KKKK\\QUOCKY;Initial Catalog=NGo_Management;User ID=sa;Password=a123;Encrypt=True;Trust Server Certificate=True");
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+		=> optionsBuilder.UseSqlServer("Data Source=DEVBLOCK; Initial Catalog=Ngo-Management;Persist Security Info=True;User ID=sa;Password=05012004;Encrypt=True;Trust Server Certificate=True");
+
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Appeal>(entity =>
         {
-            entity.HasKey(e => e.AppealsId).HasName("PK__Appeals__5E813B30B3B8A7BC");
+            entity.HasKey(e => e.AppealsId).HasName("PK__Appeals__5E813B3049020FB9");
 
             entity.HasIndex(e => e.AppealsName, "UC_Appeals_AppealsName").IsUnique();
 
@@ -55,7 +59,9 @@ public partial class NgoManagementContext : DbContext
 
         modelBuilder.Entity<Blog>(entity =>
         {
-            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E5084D36C53");
+
+            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E508A296491");
+
 
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
             entity.Property(e => e.AppealId).HasColumnName("AppealID");
@@ -76,9 +82,36 @@ public partial class NgoManagementContext : DbContext
                 .HasConstraintName("FK_Blogs_Users");
         });
 
+        modelBuilder.Entity<Comment>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAAA09D8422");
+
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
+            entity.Property(e => e.BlogId).HasColumnName("BlogID");
+            entity.Property(e => e.CreationDate).HasColumnType("datetime");
+            entity.Property(e => e.ParentCommentId).HasColumnName("ParentCommentID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Blog).WithMany(p => p.Comments)
+                .HasForeignKey(d => d.BlogId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Comments_Blogs");
+
+            entity.HasOne(d => d.ParentComment).WithMany(p => p.InverseParentComment)
+                .HasForeignKey(d => d.ParentCommentId)
+                .HasConstraintName("FK_Comments_ParentComment");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Comments)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Comments_Users");
+        });
+
         modelBuilder.Entity<Donation>(entity =>
         {
-            entity.HasKey(e => e.DonationId).HasName("PK__Donation__C5082EDBE60397CD");
+
+            entity.HasKey(e => e.DonationId).HasName("PK__Donation__C5082EDB43EA259E");
+
 
             entity.Property(e => e.DonationId).HasColumnName("DonationID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
@@ -97,7 +130,9 @@ public partial class NgoManagementContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC1BB845AB");
+
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC7F82A773");
+
 
             entity.HasIndex(e => e.Email, "UC_Users_Email").IsUnique();
 
