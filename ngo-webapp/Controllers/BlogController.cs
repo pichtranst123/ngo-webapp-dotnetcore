@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ngo_webapp.Models;
+using ngo_webapp.Models;
 using ngo_webapp.Models.Entities;
 using System;
 using System.Linq;
@@ -57,7 +58,31 @@ namespace ngo_webapp.Controllers
             var model = new BlogViewModelAD { UserId = int.Parse(userId) };
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(/*int? id*/) 
+        {
+            /*if (id == null)
+            {
+                return NotFound();
+            }
 
+            var bl = await _dbContext.Blogs.FindAsync(id);
+            if (bl == null)
+            {
+                return NotFound();
+            }
+
+            var model = new BlogViewModelAD
+            {
+                BlogId = bl.BlogId,
+                Content = bl.Content,
+                Title = bl.Title,
+                AppealId = bl.AppealId,
+                UserId = (int)bl.UserId,
+                CreationDate = bl.CreationDate,
+            };*/
+            return View(/*model*/); 
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, BlogViewModelAD model)
@@ -73,21 +98,24 @@ namespace ngo_webapp.Controllers
             if (blog == null)
             {
                 return NotFound();
+                
             }
 
             if (blog.UserId != int.Parse(userId))
             {
                 return Unauthorized();
-            }
+				
+			}
 
             if (ModelState.IsValid)
             {
-                try
+				blog.Title = model.Title;
+				blog.Content = model.Content;
+                blog.AppealId = model.AppealId;
+                blog.CreationDate = model.CreationDate;
+                blog.UserId = int.Parse(userId);
+				try
                 {
-                    blog.Title = model.Title;
-                    blog.Content = model.Content;
-                    blog.AppealId = model.AppealId;
-
                     _dbContext.Update(blog);
                     await _dbContext.SaveChangesAsync();
                 }
@@ -96,7 +124,8 @@ namespace ngo_webapp.Controllers
                     if (!BlogExists(model.BlogId))
                     {
                         return NotFound();
-                    }
+						
+					}
                     else
                     {
                         throw;
@@ -111,10 +140,14 @@ namespace ngo_webapp.Controllers
         {
             return _dbContext.Blogs.Any(e => e.BlogId == id);
         }
-
+        [HttpGet]
+        public  IActionResult Delete()
+        {
+            return View(); 
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, BlogViewModel model)
         {
             var userId = HttpContext.Session.GetString("UserID");
             var blog = await _dbContext.Blogs.FindAsync(id);

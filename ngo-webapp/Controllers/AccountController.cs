@@ -118,7 +118,7 @@ public class AccountController : Controller
 				.Include(d => d.Appeals)
 				.Select(d => new ProfileViewModel.DonationDetail
 				{
-					AppealId = d.AppealsId, 
+					AppealId = (int)d.AppealsId, 
 					AppealName = d.Appeals.AppealsName,
 					Amount = d.Amount,
 					DonationDate = d.DonationDate

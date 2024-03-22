@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ngo_webapp.Models.Entities.Appeal>
+﻿@model IEnumerable<ngo_webapp.Models.Entities.Appeal>;
 @{
 	Layout = "_LayoutDonation";
 }
@@ -11,7 +11,7 @@
 }
 
 
-@* @foreach (var appeal in Model)
+@foreach (var appeal in Model)
 {
 	<div>
 		<h2>@appeal.AppealsName</h2>
@@ -31,7 +31,7 @@
 
 			<p>End Date: @appeal.EndDate.ToShortDateString()</p>
 	</div>
-} *@
+}
 <!-- slider Area Start-->
 <div class="slider-area">
 	<div class="slider-active">

@@ -4,7 +4,7 @@ namespace ngo_webapp.Models;
 
 public class BlogViewModelAD
 {
-
+        [Key]    
         public int BlogId { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
