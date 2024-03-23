@@ -55,29 +55,7 @@
 							</div>
 						</div>
 
-						<ul class="navbar-nav header-right">
-							<li class="nav-item dropdown header-profile">
-								<a class="nav-link" href="#" role="button" data-toggle="dropdown">
-									<i class="mdi mdi-account"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
 						
-							
-									<div>
-										@if (string.IsNullOrEmpty(Context.Session.GetString("UserID")))
-										{
-											<a class="genric-btn info circle" asp-controller="Account" asp-action="Login">Login</a>
-										}
-										else
-										{
-											<form asp-controller="Account" asp-action="Logout" method="post">
-												<button type="submit" class="genric-btn danger circle">Logout</button>
-											</form>
-										}
-									</div>
-								</div>
-							</li>
-						</ul>
 					</div>
 				</nav>
 			</div>
@@ -98,7 +76,26 @@
 						</ul>
 					</li>
 
-			
+						<li class="nav-label">Account</li>
+						<li>
+							<a class="has-arrow" href="javascript:void()" aria-expanded="false">
+								<i class="icon icon-single-copy-06"></i><span class="nav-text">Pages</span>
+							</a>
+							<ul aria-expanded="false">
+								<li>
+									@if (string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+									{
+										<a class="genric-btn info circle" asp-controller="Admin" asp-action="LoginAdmin">Login</a>
+									}
+									else
+									{
+										<form asp-controller="Admin" asp-action="Logout" method="post">
+											<button type="submit" class="btn btn-success info circle" style="margin:10px 0px 10px 42px; border:none; color:#878a9e; background-color:#353b5e;">Logout</button>
+										</form>
+									}
+								</li>
+							</ul>
+						</li>
 				</ul>
 			</div>
 		</div>

@@ -118,7 +118,7 @@ public class AccountController : Controller
 				.Include(d => d.Appeals)
 				.Select(d => new ProfileViewModel.DonationDetail
 				{
-					AppealId = d.AppealsId, 
+					AppealId = d.AppealsId,
 					AppealName = d.Appeals.AppealsName,
 					Amount = d.Amount,
 					DonationDate = d.DonationDate
@@ -130,7 +130,7 @@ public class AccountController : Controller
 				RegistrationDate = user.RegistrationDate,
 				Balance = user.Balance,
 				Bio = user.Bio,
-				UserImage = user.UserImage==null? "default.jpg" : user.UserImage,
+				UserImage = user.UserImage == null ? "default.jpg" : user.UserImage,
 				Email = user.Email,
 				Donations = donations,
 				TotalAmount = donations.Sum(d => d.Amount), // Calculate the total donated amount
@@ -150,12 +150,19 @@ public class AccountController : Controller
 		{
 			return RedirectToAction("Login", "Account");
 		}
+
 		var userId = int.Parse(HttpContext.Session.GetString("UserID"));
 
 		using (NgoManagementContext context = new())
 		{
 			try
 			{
+				var existingUserWithUsername = await context.Users
+					.AnyAsync(u => u.Username == model.Username);
+				if (existingUserWithUsername)
+				{
+					ModelState.AddModelError("Username", "Username is already taken.");
+				}
 				var user = await context.Users.FindAsync(userId);
 				if (user == null)
 				{
@@ -186,74 +193,74 @@ public class AccountController : Controller
 			}
 		}
 	}
-    public async Task<IActionResult> Export(int appealId)
-    {
-        using (var context = new NgoManagementContext())
-        {
-            var donations = await context.Donations
-                .Where(d => d.AppealsId == appealId)
-                .Include(d => d.User) 
-                .Include(d => d.Appeals) 
-                .Select(d => new DonateViewModel
-                {
-                    UserName = d.User.Username,
-                    AppealName = d.Appeals.AppealsName,
-                    Amount = d.Amount,
-                    DonationDate = d.DonationDate
-                })
-                .ToListAsync();
+	public async Task<IActionResult> Export(int appealId)
+	{
+		using (var context = new NgoManagementContext())
+		{
+			var donations = await context.Donations
+				.Where(d => d.AppealsId == appealId)
+				.Include(d => d.User)
+				.Include(d => d.Appeals)
+				.Select(d => new DonateViewModel
+				{
+					UserName = d.User.Username,
+					AppealName = d.Appeals.AppealsName,
+					Amount = d.Amount,
+					DonationDate = d.DonationDate
+				})
+				.ToListAsync();
 
-            // Use "DonationsPdf" Razor view to generate the PDF content !!!!!!!
-            return new Rotativa.AspNetCore.ViewAsPdf("DonationsPdf", donations)
-            {
-                FileName = $"Donations-{DateTime.Now.ToString("yyyyMMddHHmmss")}.pdf"
-            };
-        }
-    }
+			// Use "DonationsPdf" Razor view to generate the PDF content !!!!!!!
+			return new Rotativa.AspNetCore.ViewAsPdf("DonationsPdf", donations)
+			{
+				FileName = $"Donations-{DateTime.Now.ToString("yyyyMMddHHmmss")}.pdf"
+			};
+		}
+	}
 
-    [HttpGet]
-    public IActionResult Faucet()
-    {
-        if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
-        {
-            return RedirectToAction("Login");
-        }
+	[HttpGet]
+	public IActionResult Faucet()
+	{
+		if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+		{
+			return RedirectToAction("Login");
+		}
 
-        return View(new FaucetViewModel());
-    }
+		return View(new FaucetViewModel());
+	}
 
 
 
-    [HttpPost]
-    public async Task<IActionResult> Faucet(FaucetViewModel model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+	[HttpPost]
+	public async Task<IActionResult> Faucet(FaucetViewModel model)
+	{
+		if (!ModelState.IsValid)
+		{
+			return View(model);
+		}
 
-        var userIdString = HttpContext.Session.GetString("UserID");
-        if (string.IsNullOrEmpty(userIdString))
-        {
-            return RedirectToAction("Login");
-        }
+		var userIdString = HttpContext.Session.GetString("UserID");
+		if (string.IsNullOrEmpty(userIdString))
+		{
+			return RedirectToAction("Login");
+		}
 
-        var userId = int.Parse(userIdString);
-        using (var context = new NgoManagementContext())
-        {
-            var user = await context.Users.FindAsync(userId);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "User not found.");
-                return View(model);
-            }
+		var userId = int.Parse(userIdString);
+		using (var context = new NgoManagementContext())
+		{
+			var user = await context.Users.FindAsync(userId);
+			if (user == null)
+			{
+				ModelState.AddModelError("", "User not found.");
+				return View(model);
+			}
 
-            user.Balance += model.AmountToAdd;
-            await context.SaveChangesAsync();
-        }
+			user.Balance += model.AmountToAdd;
+			await context.SaveChangesAsync();
+		}
 
-        return RedirectToAction("Profile");
-    }
+		return RedirectToAction("Profile");
+	}
 
 
 
